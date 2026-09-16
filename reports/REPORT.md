@@ -16,15 +16,17 @@ thời gian gán / 20. -->
 | Số ảnh đã gán | 20 |
 | Số skeleton | 29 |
 | v=2 / v=1 / v=0 | 333 / 60 / 100 |
-| Thời gian trung bình mỗi ảnh | |
+| Thời gian trung bình mỗi ảnh | khoảng 10 phút |
 
 Ba khớp có `%v=1` cao nhất (chép từ `reports/visibility_report.md`):
 
-1.
-2.
-3.
+1. left_hip, lên tới 31%
+2. right_hip lên tới 24%
+3. left_ear và right_ear lên tới 21%
 
 Chúng có đúng là những khớp bạn thấy khó gán nhất không? Nếu không, giải thích.
+
+Đúng vậy, hông và tai là nơi thường bị che một bên khi nghiêng người hoặc nghiêng đầu, đặc biệt hông có phạm vi lớn và khó xác định vị trí giải phẫu
 
 <!-- Trả lời 2–4 câu. Phân biệt “hay bị che” với “khó xác định vị trí giải phẫu”; nêu bằng
 chứng nhìn thấy thay vì chỉ nêu cảm giác. -->
@@ -48,14 +50,16 @@ lần sau rework. Đếm số phần tử trong từng danh sách lỗi, không 
 <!-- Mỗi dòng phải có: tên ảnh + người thứ mấy + keypoint + thao tác sửa. Không viết “đã sửa
 lại một số lỗi”. -->
 
--
--
+-train_09 người 199 có chân phải bị che hoàn toàn không nội suy ra được nên phải để outside cho các keypoint ở chân phải, nhưng do sơ suất nên đã để lại một point ở mắt cá chân phải chưa outside, hiện tại đã sửa
+-train_04 người 109 phần hông bị áo che khuất, dự đoán hông phải nằm ở góc dưới trong hình nhưng khi chạy check, check cho biết rằng điểm đó là outside, vấn đề này đã sửa
 -
 
 **Lỗi đảo trái/phải của tôi xảy ra ở ảnh nào?** Ảnh đó dễ hay khó? Nếu là ảnh dễ,
 bạn nghĩ vì sao mình vẫn sai?
 
 <!-- Nếu không có lỗi, ghi rõ “Không có lỗi đảo trái/phải trong toàn bộ 20 ảnh.” -->
+
+-train_16 người 397, ở đây check nghi ngờ là lỗi đảo trái phải do 2 mắt có phần ngược chiều với 2 bên hông, nhưng trên thực tế là do người trong ảnh quay đầu, mắt bị che được nội suy/ dự đoán ra và đã để occluded, không phải lỗi đảo trái phải thật
 
 ## 3. Kiểm chéo
 
@@ -82,11 +86,11 @@ Không chỉ ghi “cẩn thận hơn khi gán”. -->
 
 | Chỉ số | yolo26n-pose gốc | Sau fine-tune | Chênh |
 | --- | ---: | ---: | ---: |
-| pose_mAP50 | | | |
-| pose_mAP50-95 | | | |
-| pose_precision | | | |
-| pose_recall | | | |
-| box_mAP50-95 | | | |
+| pose_mAP50 | 0.845 | 0.845 | 0.0 |
+| pose_mAP50-95 | 0.6853 | 0.6908 | 0.0055 |
+| pose_precision | 0.9734 | 0.9792 | 0.0058 |
+| pose_recall | 0.8462 | 0.8462 | 0.0 |
+| box_mAP50-95 | 0.8119 | 0.8041 | -0.0078 |
 
 ### Trả lời năm câu hỏi ở cuối notebook
 
@@ -95,6 +99,8 @@ Không chỉ ghi “cẩn thận hơn khi gán”. -->
 
 1. `pose_mAP50-95` thay đổi bao nhiêu? Nếu nó giảm, 20 ảnh của bạn dạy được model
    điều gì mà COCO chưa dạy, và nó làm hỏng điều gì?
+
+   po
 
 2. `box_mAP` và `pose_mAP` chênh nhau bao nhiêu? Model tìm *người* dễ hơn hay tìm
    *khớp* dễ hơn? Vì sao?
