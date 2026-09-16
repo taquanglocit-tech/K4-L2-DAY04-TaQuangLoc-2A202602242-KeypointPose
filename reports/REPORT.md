@@ -38,12 +38,12 @@ lần sau rework. Đếm số phần tử trong từng danh sách lỗi, không 
 
 | Chỉ số | Trước rework | Sau rework |
 | --- | ---: | ---: |
-| OKS trung bình | | |
-| OKS@0.50 | | |
-| OKS@0.75 | | |
-| Lỗi `dao_trai_phai` | | |
-| Lỗi `nham_nguoi` | | |
-| Lỗi `xoa_khop_bi_che` | | |
+| OKS trung bình | 0.914 | 0.914 |
+| OKS@0.50 | 1.000 | 1.000 |
+| OKS@0.75 | 1.000 | 1.000 |
+| Lỗi `dao_trai_phai` | 0 | 0 |
+| Lỗi `nham_nguoi` | 0 | 0 |
+| Lỗi `xoa_khop_bi_che` | 13 | 13 |
 
 **Tôi đã sửa gì giữa hai lần chạy** (ghi cụ thể: ảnh nào, người thứ mấy, khớp nào):
 
@@ -100,18 +100,27 @@ Không chỉ ghi “cẩn thận hơn khi gán”. -->
 1. `pose_mAP50-95` thay đổi bao nhiêu? Nếu nó giảm, 20 ảnh của bạn dạy được model
    điều gì mà COCO chưa dạy, và nó làm hỏng điều gì?
 
-   po
+   pose_mAP50-95 tăng 0.0055, điều đó chứng tỏ việc fine-tune với 20 ảnh giúp mô hình tinh chỉnh độ chính xác định vị các khớp điểm tốt hơn so với mô hình COCO gốc trên tập dữ liệu cụ thể này
 
 2. `box_mAP` và `pose_mAP` chênh nhau bao nhiêu? Model tìm *người* dễ hơn hay tìm
    *khớp* dễ hơn? Vì sao?
 
+   box_mAP50-95 lớn hơn pose_mAP50-95 0.1133, mô hình tìm người dễ hơn tìm khớp, điều này là dễ hiểu vì boudingbox chỉ cần bao quanh toàn bộ cơ thể, còn tìm khớp thì phải xác định chính xác vị trí của từng điểm khớp nhỏ như cổ tay, mắt cá chân, dễ bị ảnh hưởng bởi hiện tượng che khuất hoặc các tư thế phức tạp
+
+
 3. Một ảnh test model đoán sai - gọi tên lỗi theo bốn loại của slide 43
    (lệch nhẹ / đảo trái/phải / nhầm người / trượt hẳn):
 
+test_02 model đoán con chim là người
+
 4. Ảnh nào có OKS thấp nhất giữa nhãn của bạn và model? Ai đúng, và bạn dựa vào đâu?
+
+ảnh train 13 có OKS thấp nhất giữa tôi và model, model ít đáng tin cậy hơn vì có những point bị che rất khó đoán
 
 5. Ảnh bạn gán tệ nhất có *cũng* là ảnh model đoán tệ nhất không? Nếu có, điều đó
    nói gì về bức ảnh đó?
+
+không, nhưng nếu có, chứng tỏ ảnh đó có chất lượng dữ liệu rất kém, rất mờ hoặc tư thế quá dị biệt, bị che khuất nhiều
 
 ## 5. Một rule evidence bạn đã dùng
 
@@ -121,3 +130,4 @@ khớp, bằng chứng nhìn thấy và lý do chọn trạng thái đó trong 3
 <!-- Cấu trúc gợi ý: (1) train_XX + người thứ mấy + keypoint; (2) căn cứ thị giác như phần cơ
 thể liền kề, trang phục hoặc vật che; (3) vì sao khớp còn trong khung (v=1) hay đã ra khỏi
 khung (v=0). -->
+train_19 người số 1 có keypoint tai trái bị che rất khó dự đoán và nếu đúng thìnó sẽ nằm ở gần phần mắt, dễ gây hiểu lầm cho mô hình về khoảng cách giữa tai và mắt, nên quyết định cho nó v=0
